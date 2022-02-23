@@ -1,0 +1,31 @@
+{
+  "cSpell.words": [
+    "blackhole",
+    "curr",
+    "dtos",
+    "heroicons",
+    "keydown",
+    "mouseenter",
+    "mouseleave",
+    "mousemove",
+    "popperjs",
+    "QINIU",
+    "typeof",
+    "vite",
+    "vnode",
+    "zeongit"
+  ],
+  "jshint.options": { "esversion": 9, "asi": true },
+  "files.exclude": {
+    "node_modules": true,
+    "dist": true,
+    "target": true,
+    ".eslintrc": true,
+    ".editorconfig": true,
+    ".gitignore": true,
+    ".prettierrc": true,
+    "pnpm-lock.yaml": true
+  },
+  "commentTranslate.hover.enabled": true,
+  "scss.validate": false
+}

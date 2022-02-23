@@ -1,0 +1,35 @@
+/*! @import */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply p-8;
+}
+
+.n-form--inline .n-select {
+  @apply w-[199px];
+}
+
+.n-image-preview-toolbar {
+  .n-base-icon {
+    @apply w-auto #{'!important'};
+  }
+}
+
+::-webkit-scrollbar {
+  @apply w-1.5 h-1.5 bg-transparent;
+}
+
+::-webkit-scrollbar-track {
+  @apply rounded-full;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply rounded-full bg-gray-300;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+}

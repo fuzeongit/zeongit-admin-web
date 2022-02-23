@@ -1,0 +1,208 @@
+<template>
+  <QueryParamsInput
+    :model="queryParamsModel"
+    @query="query"
+    :default-value="plainToClass(QueryParams, route.query)"
+    @reset-sort="handleResetSorter"
+    ref="$queryParamsInput"
+  ></QueryParamsInput>
+  <NForm class="mb-4">
+    <NButton type="success" @click="router.push('/biz/product/edit')"
+      >新增</NButton
+    >
+  </NForm>
+  <NDataTable
+    remote
+    :loading="loading"
+    :bordered="false"
+    :columns="columns"
+    :data="currentPage?.items"
+    :row-key="(row) => row.id"
+    :pagination="pagination"
+    @update:sorter="handleSorter"
+  />
+</template>
+<script lang="tsx" setup>
+import { useSort } from "@/assets/modules/base/hooks/sort.hook"
+import {
+  HandleSellingStateDictionary,
+  HandleSellingStateMessageDictionary,
+  SellingStateDictionary
+} from "@/assets/modules/biz/dictionaries/selling-state.dictionaries"
+import {
+  UseState,
+  UseStateDictionary
+} from "@/assets/modules/biz/dictionaries/use-state.dictionaries"
+import { QueryParams } from "@/assets/modules/biz/dtos/product.dto"
+import { categoryService } from "@/assets/modules/biz/services/category.service"
+import { productService } from "@/assets/modules/biz/services/product.service"
+import { Product } from "@/assets/modules/biz/vos/product.vo"
+import { usePaging } from "@/assets/page/paging.hook"
+import { format } from "@/assets/share/utils/date.util"
+import { QueryParamsType } from "@/components/pages/query-params-input/constants"
+import { useFillOptions } from "@/components/pages/query-params-input/hooks"
+import QueryParamsInput from "@/components/pages/query-params-input/index.vue"
+import { QueryParamsModel } from "@/components/pages/query-params-input/models"
+import { instanceToPlain, plainToClass } from "class-transformer"
+import { NButton, NDataTable, NForm, NPopconfirm, NSpace, NTag } from "naive-ui"
+import type { TableColumns } from "naive-ui/lib/data-table/src/interface"
+import { reactive } from "vue"
+import { useRoute, useRouter } from "vue-router"
+const queryParamsModel = reactive({
+  title: new QueryParamsModel("标题：", QueryParamsType.String, "请输入标题"),
+  createDate: new QueryParamsModel(
+    "创建时间",
+    QueryParamsType.DateRange,
+    "请选择创建时间"
+  ),
+  categoryIdList: new QueryParamsModel(
+    "分类",
+    QueryParamsType.MultiSelect,
+    "请选择分类",
+    []
+  )
+})
+
+const route = useRoute()
+const router = useRouter()
+let $queryParamsInput = $ref<any>()
+let {
+  currentPage,
+  loading,
+  pagination,
+  query,
+  getOrderString,
+  changeSort,
+  resetSort
+} = $(
+  usePaging(
+    (routerCriteria) => plainToClass(QueryParams, routerCriteria),
+    (criteria) => productService.paging(criteria),
+    (criteria) =>
+      router.replace({
+        path: "/biz/product",
+        query: instanceToPlain(criteria)
+      })
+  )
+)
+
+const columns: TableColumns<Product> = [
+  {
+    title: "名称",
+    key: "title"
+  },
+  {
+    title: "分类",
+    key: "category",
+    render(row) {
+      return (
+        <NSpace>
+          {row.categoryList.map((item, index) => (
+            <NTag>{item.name}</NTag>
+          ))}
+        </NSpace>
+      )
+    }
+  },
+  {
+    title: "属性",
+    key: "priceRange",
+    render(row) {
+      return (
+        <NSpace>
+          {row.attrList.map((item, index) => (
+            <NTag>{item.name}</NTag>
+          ))}
+        </NSpace>
+      )
+    }
+  },
+  reactive({
+    title: "价格区间（元）",
+    key: "minPrice",
+    sortOrder: getOrderString("minPrice"),
+    sorter: true,
+    render(row) {
+      return row.minPrice.toFixed(2) + "~" + row.maxPrice.toFixed(2)
+    }
+  }),
+  {
+    title: "上架状态",
+    key: "sellingState",
+    render(row) {
+      return SellingStateDictionary[row.sellingState]
+    }
+  },
+  {
+    title: "使用状态",
+    key: "useState",
+    render(row) {
+      return UseStateDictionary[row.useState]
+    }
+  },
+  reactive({
+    title: "创建时间",
+    key: "createDate",
+    sortOrder: getOrderString("createDate"),
+    sorter: true,
+    render(row) {
+      return format(row.createDate)
+    }
+  }),
+  {
+    title: "操作",
+    key: "action",
+    render(row: Product) {
+      const editButton =
+        row.useState === UseState.Unused ? (
+          <NButton
+            quaternary
+            size="small"
+            type="success"
+            onClick={() =>
+              router.push({
+                path: `/biz/product/edit/${row.id}`
+              })
+            }
+          >
+            编辑
+          </NButton>
+        ) : undefined
+      return (
+        <NSpace>
+          {editButton}
+          <NPopconfirm
+            v-slots={{
+              default: HandleSellingStateMessageDictionary[row.sellingState],
+              trigger: (
+                <NButton quaternary size="small" type="warning">
+                  {HandleSellingStateDictionary[row.sellingState]}
+                </NButton>
+              )
+            }}
+            onPositive-click={() => {}}
+          ></NPopconfirm>
+        </NSpace>
+      )
+    }
+  }
+]
+
+useFillOptions(queryParamsModel, {
+  categoryIdList: {
+    listSource: () => categoryService.list(),
+    pipe: (list) =>
+      list.map((item) => ({
+        label: item.name,
+        value: item.id
+      }))
+  }
+})
+
+const { handleSorter, handleResetSorter } = useSort(columns, {
+  changeSort,
+  resetSort,
+  getOrderString
+})
+</script>
+<style lang="scss" scoped></style>
