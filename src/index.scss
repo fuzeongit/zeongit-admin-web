@@ -3,10 +3,6 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply p-8;
-}
-
 .n-form--inline .n-select {
   @apply w-[199px];
 }
