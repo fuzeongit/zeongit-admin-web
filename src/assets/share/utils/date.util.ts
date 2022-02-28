@@ -197,8 +197,8 @@ export const differTo = (
  * @param formatString
  * @returns
  */
-export const format = (date: Date, formatString = "YYYY-MM-DD HH:mm:sss") => {
-  return dayjs(date).format(formatString)
+export const format = (date?: Date, formatString = "YYYY-MM-DD HH:mm:sss") => {
+  return date ? dayjs(date).format(formatString) : ""
 }
 
 /**

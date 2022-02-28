@@ -27,5 +27,6 @@
     "pnpm-lock.yaml": true
   },
   "commentTranslate.hover.enabled": true,
-  "scss.validate": false
+  "scss.validate": false,
+  "commentTranslate.multiLineMerge": true
 }

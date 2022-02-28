@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router"
+import { MENU_KEYS } from "./assets/modules/base/constants/menu-key.constant"
+import { customerRoutes } from "./views/biz/customer/scripts/routes"
 import { bizRoutes } from "./views/biz/routes"
 import { systemRoutes } from "./views/system/routes"
 
@@ -13,10 +15,14 @@ const routes: Array<RouteRecordRaw> = [
         path: "/",
         name: "Home",
         props: true,
+        meta: {
+          menuKey: MENU_KEYS.HOME
+        },
         component: () => import("@/views/index.vue")
       },
       ...systemRoutes,
-      ...bizRoutes
+      ...bizRoutes,
+      ...customerRoutes
     ]
   }
 ]

@@ -58,16 +58,18 @@
         </div>
       </NImageGroup>
     </div>
-    <div class="mb-2">
+    <NSpace class="!mb-1">
       <NButton type="success" @click="addAttr">新增</NButton>
       <NButton
         type="success"
         @click="generateSku"
-        class="!ml-2"
         :disabled="!dto.attrList.length || !!id"
         >生成SKU</NButton
       >
-    </div>
+      <NButton @click="selectAttrVisible = true" type="success"
+        >添加SKU</NButton
+      >
+    </NSpace>
 
     <NDataTable
       class="!mb-2"
@@ -86,6 +88,11 @@
       <NButton type="success" @click="save">保存</NButton>
     </div>
   </NCard>
+  <SelectAttrModal
+    :dto="dto"
+    v-model:visible="selectAttrVisible"
+    @confirm="addSku"
+  ></SelectAttrModal>
 </template>
 <script lang="tsx" setup>
 import { useFunction } from "@/assets/modules/base/hooks/fun.hook"
@@ -114,13 +121,14 @@ import {
 import type { TableColumns } from "naive-ui/lib/data-table/src/interface"
 import { SelectMixedOption } from "naive-ui/lib/select/src/interface"
 import { useRoute, useRouter } from "vue-router"
-
+import SelectAttrModal from "./components/select-attr-modal.vue"
 const route = useRoute()
 const router = useRouter()
 const notification = useNotification()
 const { checkResult } = $(useFunction())
 let dto = $ref<SaveDto>(new SaveDto())
 let categoryOptions = $ref<SelectMixedOption[]>([])
+let selectAttrVisible = $ref(false)
 const id = route.params.id ? Number(route.params.id) : undefined
 
 const attrColumns: TableColumns<Attr> = [
@@ -279,6 +287,10 @@ const generateSku = () => {
   dto.skuList = list
 }
 
+const addSku = (sku: Sku) => {
+  dto.skuList.push(sku)
+}
+
 const uploadMainImage = async () => {
   dto.mainImage = faker.image.city()
 }
@@ -310,7 +322,6 @@ const get = async () => {
       )
   )
   dto.skuList = data.skuList = data.skuList.map((it) => {
-    console.log(plainToClass(Sku, it))
     return plainToClass(Sku, it)
   })
 }
@@ -319,8 +330,6 @@ listCategory()
 if (id) {
   get()
 }
-
-console.log(deserializeArray(String, '["500ml"]'))
 </script>
 <style lang="scss" scoped>
 :deep(.n-image) {

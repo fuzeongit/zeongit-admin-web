@@ -75,8 +75,25 @@ watchEffect(() => {
 
 const menuOptions: MenuOption[] = [
   {
+    label: () => (
+      <RouterLink
+        to={{
+          path: "/"
+        }}
+      >
+        首页
+      </RouterLink>
+    ),
+    key: MENU_KEYS.HOME,
+    icon: () => (
+      <NIcon size={24}>
+        <HArchiveOutline />
+      </NIcon>
+    )
+  },
+  {
     label: "生意管理",
-    key: "biz",
+    key: MENU_KEYS.BIZ,
     icon: () => (
       <NIcon size={24}>
         <HArchiveOutline />
@@ -109,6 +126,23 @@ const menuOptions: MenuOption[] = [
             }}
           >
             商品管理
+          </RouterLink>
+        ),
+        icon: () => (
+          <NIcon size={24}>
+            <HArchiveOutline />
+          </NIcon>
+        )
+      },
+      {
+        key: MENU_KEYS.BIZ_CUSTOMER,
+        label: () => (
+          <RouterLink
+            to={{
+              path: "/biz/customer"
+            }}
+          >
+            客户管理
           </RouterLink>
         ),
         icon: () => (

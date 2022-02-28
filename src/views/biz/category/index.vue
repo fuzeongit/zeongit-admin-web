@@ -88,10 +88,10 @@ let {
 let $edit = $ref<any | undefined>()
 
 const columns: TableColumns<Category> = [
-  {
-    type: "selection",
-    disabled: (row) => row.name === "Maureen Schaden"
-  },
+  // {
+  //   type: "selection",
+  //   disabled: (row) => row.name === "Maureen Schaden"
+  // },
   reactive({
     title: "名称",
     key: "name",
