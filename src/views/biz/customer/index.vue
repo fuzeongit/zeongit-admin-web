@@ -139,6 +139,9 @@ const columns: TableColumns<Customer> = [
     render(row) {
       return (
         <NSpace>
+          <NButton quaternary size="small" type="success">
+            赠券
+          </NButton>
           <NPopconfirm
             v-slots={{
               default: HandleFrozenStateMessageDictionary[row.frozenState],
