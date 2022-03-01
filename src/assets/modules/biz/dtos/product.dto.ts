@@ -1,8 +1,7 @@
 import { Pageable } from "@/assets/page/models"
 import {
   ParseArray,
-  ParseDateRange,
-  ParseDeserializeArray
+  ParseDateRange
 } from "@/assets/share/decorators/transform.decorator"
 import { IsDateRange } from "@/assets/share/decorators/validator-decorator"
 import { Expose, Type } from "class-transformer"

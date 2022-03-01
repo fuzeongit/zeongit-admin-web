@@ -16,6 +16,7 @@
     :pagination="pagination"
     @update:sorter="handleSorter"
   />
+  <GiveCoupon ref="$giveCoupon"></GiveCoupon>
 </template>
 <script lang="tsx" setup>
 import { useFunction } from "@/assets/modules/base/hooks/fun.hook"
@@ -26,10 +27,6 @@ import {
   HandleFrozenStateDictionary,
   HandleFrozenStateMessageDictionary
 } from "@/assets/modules/biz/dictionaries/frozen-state.dictionary"
-import {
-  UseState,
-  UseStateDictionary
-} from "@/assets/modules/biz/dictionaries/use-state.dictionaries"
 import { QueryParams } from "@/assets/modules/biz/dtos/customer.dto"
 import { customerService } from "@/assets/modules/biz/services/customer.service"
 import { Customer } from "@/assets/modules/biz/vos/customer.vo"
@@ -50,7 +47,7 @@ import {
 import type { TableColumns } from "naive-ui/lib/data-table/src/interface"
 import { reactive } from "vue"
 import { useRoute, useRouter } from "vue-router"
-
+import GiveCoupon from "./components/give-coupon.vue"
 const route = useRoute()
 const router = useRouter()
 const { checkResult } = $(useFunction())
@@ -102,6 +99,7 @@ let {
       })
   )
 )
+let $giveCoupon = $ref<any | undefined>()
 
 const columns: TableColumns<Customer> = [
   reactive({
@@ -139,7 +137,12 @@ const columns: TableColumns<Customer> = [
     render(row) {
       return (
         <NSpace>
-          <NButton quaternary size="small" type="success">
+          <NButton
+            quaternary
+            size="small"
+            type="success"
+            onClick={() => $giveCoupon.show(row.id)}
+          >
             赠券
           </NButton>
           <NPopconfirm

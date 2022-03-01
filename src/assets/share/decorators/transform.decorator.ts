@@ -48,11 +48,8 @@ export const ParseEmptyString = () =>
 
 export const ParseSerialize = () => Transform(parseSerializeTransformFn)
 
-export const ParseDeserialize = <T>(cls: ClassConstructor<T>) =>
-  Transform(({ value }: TransformFnParams) => deserialize(cls, value))
-
-export const ParseDeserializeArray = <T>(cls: ClassConstructor<T>) =>
-  Transform(({ value }: TransformFnParams) => deserializeArray(cls, value))
+export const ParseDeserialize = () =>
+  Transform(({ value }: TransformFnParams) => JSON.parse(value))
 
 export const ParseCentToYuan = () =>
   Transform(({ value }: TransformFnParams) => centToYuan(value))
