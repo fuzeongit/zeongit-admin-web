@@ -1,5 +1,6 @@
 import { Base } from "../../base/vos/base.vo"
 import { CouponType } from "../dictionaries/coupon-type.dictionary"
+import { UseState } from "./../dictionaries/use-state.dictionaries"
 
 export interface CouponRule {
   critical: number
@@ -9,7 +10,7 @@ export interface CouponRule {
   discount: number
 }
 
-export interface Coupon extends Base{
+export interface Coupon extends Base {
   customerId: number
 
   couponType: CouponType
@@ -18,6 +19,7 @@ export interface Coupon extends Base{
 
   endDate?: Date
 
- 
+  useState: UseState
+
   rule: CouponRule
 }

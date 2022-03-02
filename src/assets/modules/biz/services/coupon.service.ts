@@ -13,5 +13,8 @@ export const couponService = {
   },
   get(id: number): Promise<Result<Coupon>> {
     return fetchService.get("/biz/coupon/get", { params: { id } })
+  },
+  delete(id: number): Promise<Result<void>> {
+    return fetchService.post("/biz/coupon/delete", { id })
   }
 }

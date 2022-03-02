@@ -10,7 +10,7 @@
       <NFormItem
         :label="attr.name"
         :path="`[${index}]`"
-        v-for="(attr, index) in dto.attrList"
+        v-for="(attr, index) in attrList"
       >
         <NSelect
           v-model:value="valueCodeList[index]"
@@ -29,6 +29,7 @@
 
 <script lang="tsx" setup>
 import { SaveDto, Sku } from "@/assets/modules/biz/dtos/product.dto"
+import { defaultsDeep, merge } from "lodash"
 import {
   NForm,
   NFormItem,
@@ -39,6 +40,7 @@ import {
   NInput
 } from "naive-ui"
 import { PropType } from "vue"
+import { Attr } from "@/assets/modules/biz/dtos/product.dto"
 const notification = useNotification()
 
 const emits = defineEmits({
@@ -47,6 +49,10 @@ const emits = defineEmits({
 })
 
 const props = defineProps({
+  defaultAttrList: {
+    type: Object as PropType<Attr[]>,
+    required: true
+  },
   dto: {
     type: Object as PropType<SaveDto>,
     required: true
@@ -64,10 +70,22 @@ let internalVisible = $computed({
   }
 })
 
+let attrList = $computed(() => {
+  return props.dto.attrList.map((attr) => {
+    const defaultAttr = props.defaultAttrList.find(
+      (item) => item.id === attr.id
+    )
+
+    return merge({}, attr, {
+      valueList: [...(defaultAttr?.valueList ?? []), ...attr.valueList]
+    })
+  })
+})
+
 let valueCodeList = $ref(props.dto.attrList.map((item, index) => null))
 
 let valueOptionsList = $computed(() =>
-  props.dto.attrList.map((item) =>
+  attrList.map((item) =>
     item.valueList.map((value, index) => ({
       label: value,
       value: index.toString().padStart(2, "0")

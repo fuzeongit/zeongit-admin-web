@@ -20,7 +20,11 @@ export class SaveDto {
 }
 
 export class Attr {
-  constructor(public name: string = "", public valueList: string[] = []) {}
+  constructor(
+    public id?: number,
+    public name: string = "",
+    public valueList: string[] = []
+  ) {}
 }
 
 export class Sku {

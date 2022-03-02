@@ -9,5 +9,13 @@ export const customerRoutes: Array<RouteRecordRaw> = [
       menuKey: MENU_KEYS.BIZ_CUSTOMER
     },
     component: () => import("../index.vue")
+  },
+  {
+    path: "/biz/coupon/:customerId",
+    props: true,
+    meta: {
+      menuKey: MENU_KEYS.BIZ_CUSTOMER
+    },
+    component: () => import("../coupon.vue")
   }
 ]

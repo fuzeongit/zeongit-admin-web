@@ -23,10 +23,12 @@
   />
 </template>
 <script lang="tsx" setup>
+import { useFunction } from "@/assets/modules/base/hooks/fun.hook"
 import { useSort } from "@/assets/modules/base/hooks/sort.hook"
 import {
   HandleSellingStateDictionary,
   HandleSellingStateMessageDictionary,
+  SellingState,
   SellingStateDictionary
 } from "@/assets/modules/biz/dictionaries/selling-state.dictionaries"
 import {
@@ -44,7 +46,15 @@ import { useFillOptions } from "@/components/pages/query-params-input/hooks"
 import QueryParamsInput from "@/components/pages/query-params-input/index.vue"
 import { QueryParamsModel } from "@/components/pages/query-params-input/models"
 import { instanceToPlain, plainToClass } from "class-transformer"
-import { NButton, NDataTable, NForm, NPopconfirm, NSpace, NTag } from "naive-ui"
+import {
+  NButton,
+  NDataTable,
+  NForm,
+  NPopconfirm,
+  NSpace,
+  NTag,
+  useNotification
+} from "naive-ui"
 import type { TableColumns } from "naive-ui/lib/data-table/src/interface"
 import { reactive } from "vue"
 import { useRoute, useRouter } from "vue-router"
@@ -65,6 +75,8 @@ const queryParamsModel = reactive({
 
 const route = useRoute()
 const router = useRouter()
+const notification = useNotification()
+const { checkResult } = $(useFunction())
 let $queryParamsInput = $ref<any>()
 let {
   currentPage,
@@ -73,7 +85,8 @@ let {
   query,
   getOrderString,
   changeSort,
-  resetSort
+  resetSort,
+  changePage
 } = $(
   usePaging(
     (routerCriteria) => plainToClass(QueryParams, routerCriteria),
@@ -180,7 +193,7 @@ const columns: TableColumns<Product> = [
                 </NButton>
               )
             }}
-            onPositive-click={() => {}}
+            onPositive-click={() => handleSelling(row.sellingState, row.id)}
           ></NPopconfirm>
         </NSpace>
       )
@@ -198,6 +211,21 @@ useFillOptions(queryParamsModel, {
       }))
   }
 })
+
+const handleSelling = async (sellingState: SellingState, id: number) => {
+  const FUNCTIONS = {
+    [SellingState.Not]: () => productService.push([id]),
+    [SellingState.On]: () => productService.pull([id])
+  }
+  const result = await FUNCTIONS[sellingState]()
+  checkResult(result)
+  notification.success({
+    title: "提示",
+    content: `${HandleSellingStateDictionary[sellingState]}成功`,
+    duration: 5000
+  })
+  changePage(pagination.page)
+}
 
 const { handleSorter, handleResetSorter } = useSort(columns, {
   changeSort,

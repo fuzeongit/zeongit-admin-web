@@ -145,6 +145,14 @@ const columns: TableColumns<Customer> = [
           >
             赠券
           </NButton>
+          <NButton
+            quaternary
+            size="small"
+            type="success"
+            onClick={() => router.push({ path: `/biz/coupon/${row.id}` })}
+          >
+            查券
+          </NButton>
           <NPopconfirm
             v-slots={{
               default: HandleFrozenStateMessageDictionary[row.frozenState],

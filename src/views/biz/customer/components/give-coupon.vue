@@ -34,12 +34,13 @@
         </NFormItem>
       </template>
       <template v-else-if="dto.couponType === CouponType.Discount">
-        <NFormItem label="折扣" path="rule.reduce">
+        <NFormItem label="折扣" path="rule.discount">
           <NInputNumber
-            v-model:value="dto.rule.reduce"
+            v-model:value="dto.rule.discount"
             clearable
             :min="1"
             :max="10"
+            :step="0.1"
             class="w-full"
           />
         </NFormItem>
@@ -49,8 +50,8 @@
         class="justify-end"
         @click="save"
         :loading="loading"
-        >保存</NButton
-      >
+        >保存
+      </NButton>
     </NForm>
   </NModal>
 </template>

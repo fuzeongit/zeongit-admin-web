@@ -10,6 +10,7 @@
           v-model:value="dto.categoryIdList"
           placeholder="请选择分类"
           :options="categoryOptions"
+          :disabled="!create"
           clearable
         />
       </NFormItem>
@@ -59,11 +60,13 @@
       </NImageGroup>
     </div>
     <NSpace class="!mb-1">
-      <NButton type="success" @click="addAttr">新增</NButton>
+      <NButton type="success" @click="addAttr" :disabled="!create"
+        >新增</NButton
+      >
       <NButton
         type="success"
         @click="generateSku"
-        :disabled="!dto.attrList.length || !!id"
+        :disabled="!dto.attrList.length || !create"
         >生成SKU</NButton
       >
       <NButton @click="selectAttrVisible = true" type="success"
@@ -89,6 +92,7 @@
     </div>
   </NCard>
   <SelectAttrModal
+    :default-attr-list="defaultAttrList"
     :dto="dto"
     v-model:visible="selectAttrVisible"
     @confirm="addSku"
@@ -100,7 +104,7 @@ import { Attr, SaveDto, Sku } from "@/assets/modules/biz/dtos/product.dto"
 import { categoryService } from "@/assets/modules/biz/services/category.service"
 import { productService } from "@/assets/modules/biz/services/product.service"
 import faker from "@faker-js/faker"
-import { deserializeArray, plainToClass } from "class-transformer"
+import { plainToClass } from "class-transformer"
 import {
   NButton,
   NCard,
@@ -109,14 +113,14 @@ import {
   NEmpty,
   NForm,
   NFormItem,
+  NImage,
+  NImageGroup,
   NInput,
   NPopconfirm,
   NSelect,
-  NTag,
-  useNotification,
   NSpace,
-  NImage,
-  NImageGroup
+  NTag,
+  useNotification
 } from "naive-ui"
 import type { TableColumns } from "naive-ui/lib/data-table/src/interface"
 import { SelectMixedOption } from "naive-ui/lib/select/src/interface"
@@ -130,13 +134,16 @@ let dto = $ref<SaveDto>(new SaveDto())
 let categoryOptions = $ref<SelectMixedOption[]>([])
 let selectAttrVisible = $ref(false)
 const id = route.params.id ? Number(route.params.id) : undefined
+const create = !id
+
+let defaultAttrList = $ref<Attr[]>([])
 
 const attrColumns: TableColumns<Attr> = [
   {
     title: "属性名称",
     key: "name",
     width: "200px",
-    render(row, index) {
+    render(row) {
       return (
         <NInput v-model:value={row.name} placeholder="请输入名称" clearable />
       )
@@ -145,8 +152,15 @@ const attrColumns: TableColumns<Attr> = [
   {
     title: "属性值",
     key: "createDate",
-    render(row) {
-      return <NDynamicTags v-model:value={row.valueList} max={20} />
+    render(row, index) {
+      return (
+        <NSpace>
+          {defaultAttrList[index]?.valueList.map((it) => (
+            <NTag>{it}</NTag>
+          ))}
+          <NDynamicTags v-model:value={row.valueList} max={20} />
+        </NSpace>
+      )
     }
   },
   {
@@ -157,7 +171,7 @@ const attrColumns: TableColumns<Attr> = [
       const slots = {
         default: "删除属性后商品将无法显示该属性，确定删除吗？",
         trigger: (
-          <NButton quaternary size="small" type="warning">
+          <NButton quaternary size="small" type="warning" disabled={!!row.id}>
             删除
           </NButton>
         )
@@ -216,25 +230,19 @@ const skuColumns: TableColumns<Sku> = [
       const slots = {
         default: "删除Sku后商品规格将不存在，确定删除吗？",
         trigger: (
-          <NButton quaternary size="small" type="warning">
+          <NButton quaternary size="small" type="warning" disabled={!!row.id}>
             删除
           </NButton>
         )
       }
       return (
         <NSpace>
-          {id ? (
-            <NButton quaternary size="small" type="success">
-              修改
-            </NButton>
-          ) : (
-            <NPopconfirm
-              v-slots={slots}
-              onPositive-click={() => {
-                dto.skuList.splice(index, 1)
-              }}
-            ></NPopconfirm>
-          )}
+          <NPopconfirm
+            v-slots={slots}
+            onPositive-click={() => {
+              dto.skuList.splice(index, 1)
+            }}
+          ></NPopconfirm>
         </NSpace>
       )
     }
@@ -301,29 +309,42 @@ const uploadDetail = async () => {
   dto.detail.push(faker.image.city())
 }
 const save = async () => {
-  const result = await productService.create(dto)
+  const result = await (create
+    ? productService.create(dto)
+    : productService.update(id, dto))
   checkResult(result)
+  notification.success({
+    title: "提示",
+    content: `保存成功`,
+    duration: 5000
+  })
+  router.back()
 }
 
 const get = async () => {
   const result = await productService.get(id!)
   checkResult(result)
   const { data } = result
-  dto.categoryIdList = data.categoryList.map((item) => item.id)
+  dto.categoryIdList = data.categoryList.map((item) => item.categoryId)
   dto.title = data.title
   dto.mainImage = data.mainImage
   dto.images = data.images
   dto.detail = data.detail
-  dto.attrList = data.attrList.map(
+  dto.attrList = data.attrList.map((it) => new Attr(it.id, it.name, []))
+
+  defaultAttrList = data.attrList.map(
     (it) =>
       new Attr(
+        it.id,
         it.name,
-        it.valueList.map((v) => v.name)
+        it.valueList.map((value) => value.name)
       )
   )
+
   dto.skuList = data.skuList = data.skuList.map((it) => {
     return plainToClass(Sku, it)
   })
+  console.log(dto)
 }
 listCategory()
 
