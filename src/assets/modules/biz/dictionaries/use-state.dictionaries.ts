@@ -5,5 +5,5 @@ export enum UseState {
 
 export const UseStateDictionary = {
   [UseState.Unused]: "未使用",
-  [UseState.Used]: "使用中"
+  [UseState.Used]: "已使用"
 }

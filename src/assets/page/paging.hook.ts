@@ -78,31 +78,40 @@ export const usePaging = <T, S extends Pageable>(
    * 改变排序
    * @param sortState
    */
-  const changeSort = async (sortState: SortState) => {
-    let list2d = (criteria.value.sort as string[]).map((it) => it.split(","))
-    const current = list2d.find(
-      ([columnKey]) => columnKey === sortState.columnKey
-    )
-
-    // 如果是排序
-    if (sortState.order) {
-      if (current) {
-        current[1] = ORDER[sortState.order]
+  const changeSort = async (sortState: SortState, multiple: boolean) => {
+    let targetCriteria
+    if (multiple) {
+      let list2d = (criteria.value.sort as string[]).map((it) => it.split(","))
+      const current = list2d.find(
+        ([columnKey]) => columnKey === sortState.columnKey
+      )
+      // 如果是排序
+      if (sortState.order) {
+        if (current) {
+          current[1] = ORDER[sortState.order]
+        } else {
+          list2d.push([sortState.columnKey as string, ORDER[sortState.order]])
+        }
       } else {
-        list2d.push([sortState.columnKey as string, ORDER[sortState.order]])
+        if (current) {
+          list2d = list2d.filter(
+            ([columnKey]) => columnKey !== sortState.columnKey
+          )
+        }
       }
+      targetCriteria = Object.assign({}, criteria.value, {
+        page: 1,
+        sort: list2d.map(([columnKey, order]) => `${columnKey},${order}`)
+      })
     } else {
-      if (current) {
-        list2d = list2d.filter(
-          ([columnKey]) => columnKey !== sortState.columnKey
-        )
-      }
+      targetCriteria = Object.assign({}, criteria.value, {
+        page: 1,
+        sort: sortState.order
+          ? [`${sortState.columnKey},${ORDER[sortState.order]}`]
+          : []
+      })
     }
 
-    const targetCriteria = Object.assign({}, criteria.value, {
-      page: 1,
-      sort: list2d.map(([columnKey, order]) => `${columnKey},${order}`)
-    })
     await buildJump(targetCriteria)
     criteria.value = targetCriteria
     await paging()

@@ -9,7 +9,7 @@
     <NForm :model="dto">
       <NFormItem label="优惠方式" path="name">
         <NSelect
-          v-model:value="dto.couponType"
+          v-model:value="dto.type"
           placeholder="请选择优惠方式"
           :options="couponTypeOptions"
         >
@@ -22,7 +22,7 @@
           class="w-full"
         />
       </NFormItem>
-      <template v-if="dto.couponType === CouponType.Reduce">
+      <template v-if="dto.type === CouponType.Reduce">
         <NFormItem label="减免" path="rule.reduce">
           <NInputNumber
             v-model:value="dto.rule.reduce"
@@ -33,7 +33,7 @@
           />
         </NFormItem>
       </template>
-      <template v-else-if="dto.couponType === CouponType.Discount">
+      <template v-else-if="dto.type === CouponType.Discount">
         <NFormItem label="折扣" path="rule.discount">
           <NInputNumber
             v-model:value="dto.rule.discount"
@@ -110,7 +110,7 @@ const save = async () => {
 }
 
 watch(
-  computed(() => dto?.couponType),
+  computed(() => dto?.type),
   () => {
     dto.rule = new CouponRuleDto()
   }

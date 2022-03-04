@@ -5,7 +5,8 @@ import {
 } from "@/assets/share/decorators/transform.decorator"
 import { IsDateRange } from "@/assets/share/decorators/validator-decorator"
 import { Expose, Type } from "class-transformer"
-import { IsInt, IsOptional, IsString } from "class-validator"
+import { IsEnum, IsInt, IsOptional, IsString } from "class-validator"
+import { SellingState } from "../dictionaries/selling-state.dictionaries"
 
 export class SaveDto {
   constructor(
@@ -61,4 +62,10 @@ export class QueryParams extends Pageable {
   @ParseArray()
   @Expose({ name: "categoryIdList" })
   categoryIdList?: number[]
+
+  @IsEnum(SellingState)
+  @Type(() => Number)
+  @IsOptional()
+  @Expose({ name: "sellingState" })
+  sellingState?: SellingState
 }

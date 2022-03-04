@@ -53,7 +53,7 @@ const router = useRouter()
 const { checkResult } = $(useFunction())
 const notification = useNotification()
 const queryParamsModel = {
-  couponType: new QueryParamsModel(
+  type: new QueryParamsModel(
     "优惠方式",
     QueryParamsType.Select,
     "请选择优惠方式",
@@ -116,9 +116,9 @@ let {
 const columns: TableColumns<Coupon> = [
   {
     title: "优惠方式",
-    key: "couponType",
+    key: "type",
     render(row) {
-      return CouponTypeDictionary[row.couponType]
+      return CouponTypeDictionary[row.type]
     }
   },
   {
@@ -136,10 +136,10 @@ const columns: TableColumns<Coupon> = [
     title: "规则",
     key: "rule",
     render(row) {
-      if (row.couponType === CouponType.Reduce)
+      if (row.type === CouponType.Reduce)
         return `满${row.rule.critical}元减${row.rule.reduce}元`
-      else if (row.couponType === CouponType.Discount)
-        return `满${row.rule.critical}元享${row.rule.reduce}折`
+      else if (row.type === CouponType.Discount)
+        return `满${row.rule.critical}元享${row.rule.discount}折`
       return ""
     }
   },

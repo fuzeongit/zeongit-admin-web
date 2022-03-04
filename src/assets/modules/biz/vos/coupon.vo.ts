@@ -1,4 +1,4 @@
-import { Base } from "../../base/vos/base.vo"
+import { CustomerBase } from "../../base/vos/customer-base.vo"
 import { CouponType } from "../dictionaries/coupon-type.dictionary"
 import { UseState } from "./../dictionaries/use-state.dictionaries"
 
@@ -10,10 +10,8 @@ export interface CouponRule {
   discount: number
 }
 
-export interface Coupon extends Base {
-  customerId: number
-
-  couponType: CouponType
+export interface Coupon extends CustomerBase {
+  type: CouponType
 
   startDate: Date
 

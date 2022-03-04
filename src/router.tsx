@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router"
 import { MENU_KEYS } from "./assets/modules/base/constants/menu-key.constant"
 import { customerRoutes } from "./views/biz/customer/scripts/routes"
+import { orderRoutes } from "./views/biz/order/scripts/routes"
 import { bizRoutes } from "./views/biz/routes"
 import { systemRoutes } from "./views/system/routes"
 
@@ -22,7 +23,8 @@ const routes: Array<RouteRecordRaw> = [
       },
       ...systemRoutes,
       ...bizRoutes,
-      ...customerRoutes
+      ...customerRoutes,
+      ...orderRoutes
     ]
   }
 ]

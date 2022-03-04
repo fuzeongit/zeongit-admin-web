@@ -17,5 +17,13 @@ export const productRoutes: Array<RouteRecordRaw> = [
       menuKey: MENU_KEYS.BIZ_PRODUCT
     },
     component: () => import("../edit.vue")
+  },
+  {
+    path: "/biz/product/detail/:id",
+    props: true,
+    meta: {
+      menuKey: MENU_KEYS.BIZ_PRODUCT
+    },
+    component: () => import("../detail.vue")
   }
 ]

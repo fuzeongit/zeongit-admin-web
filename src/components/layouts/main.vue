@@ -150,6 +150,23 @@ const menuOptions: MenuOption[] = [
             <HArchiveOutline />
           </NIcon>
         )
+      },
+      {
+        key: MENU_KEYS.BIZ_ORDER,
+        label: () => (
+          <RouterLink
+            to={{
+              path: "/biz/order"
+            }}
+          >
+            订单管理
+          </RouterLink>
+        ),
+        icon: () => (
+          <NIcon size={24}>
+            <HArchiveOutline />
+          </NIcon>
+        )
       }
     ]
   }

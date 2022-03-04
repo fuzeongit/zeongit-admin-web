@@ -17,7 +17,7 @@ export class CouponRuleDto {
 export class CouponDto {
   constructor(
     public customerId: number = 0,
-    public couponType: CouponType = CouponType.Reduce,
+    public type: CouponType = CouponType.Reduce,
     public startDate: Date = new Date(),
     public endDate?: Date,
     public rule: CouponRuleDto = new CouponRuleDto()
@@ -34,8 +34,8 @@ export class QueryParams extends Pageable {
   @IsEnum(CouponType)
   @Type(() => Number)
   @IsOptional()
-  @Expose({ name: "couponType" })
-  couponType?: CouponType
+  @Expose({ name: "type" })
+  type?: CouponType
 
   @IsDateRange()
   @ParseDateRange()

@@ -70,6 +70,15 @@ const queryParamsModel = reactive({
     QueryParamsType.MultiSelect,
     "请选择分类",
     []
+  ),
+  sellingState: new QueryParamsModel(
+    "上架状态",
+    QueryParamsType.Select,
+    "请选择上架状态",
+    Object.keys(SellingStateDictionary).map((key: string) => ({
+      label: SellingStateDictionary[key as unknown as SellingState],
+      value: Number(key)
+    }))
   )
 })
 
@@ -183,6 +192,18 @@ const columns: TableColumns<Product> = [
         ) : undefined
       return (
         <NSpace>
+          <NButton
+            quaternary
+            size="small"
+            type="success"
+            onClick={() =>
+              router.push({
+                path: `/biz/product/detail/${row.id}`
+              })
+            }
+          >
+            详情
+          </NButton>
           {editButton}
           <NPopconfirm
             v-slots={{
