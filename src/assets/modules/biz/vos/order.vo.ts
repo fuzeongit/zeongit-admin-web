@@ -6,6 +6,7 @@ export interface Order extends CustomerBase {
   state: OrderState
   sourceAmount: number
   amount: number
+  payDate?: Date
 
   skuList: OrderSku[]
 

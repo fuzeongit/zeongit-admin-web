@@ -31,7 +31,7 @@ import { QueryParamsType } from "@/components/pages/query-params-input/constants
 import QueryParamsInput from "@/components/pages/query-params-input/index.vue"
 import { QueryParamsModel } from "@/components/pages/query-params-input/models"
 import { instanceToPlain, plainToClass } from "class-transformer"
-import { NButton, NDataTable } from "naive-ui"
+import { NButton, NDataTable, NList, NListItem, NSpace, NThing } from "naive-ui"
 import type { TableColumns } from "naive-ui/lib/data-table/src/interface"
 import { reactive } from "vue"
 import { useRoute, useRouter } from "vue-router"
@@ -82,15 +82,23 @@ let {
 )
 
 const columns: TableColumns<Order> = [
-  reactive({
-    title: "创建时间",
-    key: "createDate",
-    sortOrder: getOrderString("createDate"),
-    sorter: true,
-    render(row) {
-      return format(row.createDate)
+  {
+    type: "expand",
+    renderExpand: (row) => {
+      return (
+        <NList
+          v-slots={{
+            header: <NThing title="商品列表" />,
+            default: row.skuList.map((sku) => (
+              <NListItem>
+                {sku.title + " " + sku.price + " " + sku.count}
+              </NListItem>
+            ))
+          }}
+        ></NList>
+      )
     }
-  }),
+  },
   reactive({
     title: "原金额",
     key: "sourceAmount",
@@ -110,14 +118,34 @@ const columns: TableColumns<Order> = [
       return OrderStateDictionary[row.state]
     }
   },
+  reactive({
+    title: "支付时间",
+    key: "payDate",
+    sortOrder: getOrderString("payDate"),
+    sorter: true
+  }),
+  reactive({
+    title: "创建时间",
+    key: "createDate",
+    sortOrder: getOrderString("createDate"),
+    sorter: true,
+    render(row) {
+      return format(row.createDate)
+    }
+  }),
   {
     title: "操作",
     key: "action",
     render(row) {
       return (
-        <NButton quaternary size="small" type="success">
-          编辑
-        </NButton>
+        <NSpace>
+          <NButton quaternary size="small" type="success">
+            详情
+          </NButton>
+          <NButton quaternary size="small" type="success">
+            发货
+          </NButton>
+        </NSpace>
       )
     }
   }
