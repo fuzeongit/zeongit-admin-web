@@ -1,5 +1,5 @@
-import { Result } from "@/assets/http/models"
-import { Pagination } from "@/assets/page/vos"
+import { Result } from "@zeongit/share-nest-vue/http"
+import { Pagination } from "@zeongit/share-nest-vue/page"
 import { QueryParams, SaveDto } from "../dtos/product.dto"
 import { Product } from "../vos/product.vo"
 import { fetchService } from "./fetch.service"

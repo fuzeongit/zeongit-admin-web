@@ -1,4 +1,4 @@
-import { FetchClient } from "@/assets/http/services"
+import { FetchClient } from "@zeongit/share-nest-vue/http"
 import { localGet } from "@zeongit/share-ts"
 import { AUTHORIZATION } from "../../base/constants/storage-key.constant"
 
