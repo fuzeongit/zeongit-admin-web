@@ -16,9 +16,9 @@
     :loading="loading"
     :bordered="false"
     :columns="columns"
-    :data="currentPage?.items"
+    :data="pagination?.items"
     :row-key="(row) => row.id"
-    :pagination="pagination"
+    :pagination="paginationProps"
     @update:sorter="handleSorter"
   />
 </template>
@@ -39,7 +39,7 @@ import { QueryParams } from "@/assets/modules/biz/dtos/product.dto"
 import { categoryService } from "@/assets/modules/biz/services/category.service"
 import { productService } from "@/assets/modules/biz/services/product.service"
 import { Product } from "@/assets/modules/biz/vos/product.vo"
-import { usePaging } from "@/assets/page/paging.hook"
+import { usePaging } from "@/assets/modules/base/hooks/paging.hook"
 import { format } from "@/assets/share/utils/date.util"
 import { QueryParamsType } from "@/components/pages/query-params-input/constants"
 import { useFillOptions } from "@/components/pages/query-params-input/hooks"
@@ -87,19 +87,20 @@ const router = useRouter()
 const notification = useNotification()
 const { checkResult } = $(useFunction())
 let $queryParamsInput = $ref<any>()
+
 let {
-  currentPage,
+  paginationProps,
   loading,
   pagination,
   query,
+  changePage,
   getOrderString,
   changeSort,
-  resetSort,
-  changePage
+  resetSort
 } = $(
   usePaging(
+    (criteria: QueryParams) => productService.paging(criteria),
     (routerCriteria) => plainToClass(QueryParams, routerCriteria),
-    (criteria) => productService.paging(criteria),
     (criteria) =>
       router.replace({
         path: "/biz/product",
@@ -245,7 +246,7 @@ const handleSelling = async (sellingState: SellingState, id: number) => {
     content: `${HandleSellingStateDictionary[sellingState]}成功`,
     duration: 5000
   })
-  changePage(pagination.page)
+  changePage(paginationProps.page)
 }
 
 const { handleSorter, handleResetSorter } = useSort(columns, {

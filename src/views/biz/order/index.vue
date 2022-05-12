@@ -10,9 +10,9 @@
     :loading="loading"
     :bordered="false"
     :columns="columns"
-    :data="currentPage?.items"
+    :data="pagination?.items"
     :row-key="(row) => row.id"
-    :pagination="pagination"
+    :pagination="paginationProps"
     @update:sorter="handleSorter"
   />
 </template>
@@ -25,7 +25,7 @@ import {
 import { QueryParams } from "@/assets/modules/biz/dtos/order.dto"
 import { orderService } from "@/assets/modules/biz/services/order.service"
 import { Order } from "@/assets/modules/biz/vos/order.vo"
-import { usePaging } from "@/assets/page/paging.hook"
+import { usePaging } from "@/assets/modules/base/hooks/paging.hook"
 import { format } from "@/assets/share/utils/date.util"
 import { QueryParamsType } from "@/components/pages/query-params-input/constants"
 import QueryParamsInput from "@/components/pages/query-params-input/index.vue"
@@ -60,8 +60,9 @@ const queryParamsModel = {
   )
 }
 
+
 let {
-  currentPage,
+  paginationProps,
   loading,
   pagination,
   query,
@@ -71,8 +72,8 @@ let {
   resetSort
 } = $(
   usePaging(
+    (criteria: QueryParams) => orderService.paging(criteria),
     (routerCriteria) => plainToClass(QueryParams, routerCriteria),
-    (criteria) => orderService.paging(criteria),
     (criteria) =>
       router.replace({
         path: "/biz/order",

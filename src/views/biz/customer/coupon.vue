@@ -11,9 +11,9 @@
     :loading="loading"
     :bordered="false"
     :columns="columns"
-    :data="currentPage?.items"
+    :data="pagination?.items"
     :row-key="(row) => row.id"
-    :pagination="pagination"
+    :pagination="paginationProps"
     @update:sorter="handleSorter"
   />
 </template>
@@ -31,7 +31,7 @@ import {
 import { QueryParams } from "@/assets/modules/biz/dtos/coupon.dto"
 import { couponService } from "@/assets/modules/biz/services/coupon.service"
 import { Coupon } from "@/assets/modules/biz/vos/coupon.vo"
-import { usePaging } from "@/assets/page/paging.hook"
+import { usePaging } from "@/assets/modules/base/hooks/paging.hook"
 import { format } from "@/assets/share/utils/date.util"
 import { QueryParamsType } from "@/components/pages/query-params-input/constants"
 import QueryParamsInput from "@/components/pages/query-params-input/index.vue"
@@ -89,7 +89,7 @@ const queryParamsModel = {
 }
 
 let {
-  currentPage,
+  paginationProps,
   loading,
   pagination,
   query,
@@ -99,12 +99,12 @@ let {
   resetSort
 } = $(
   usePaging(
-    (routerCriteria) => plainToClass(QueryParams, routerCriteria),
-    (criteria) =>
+    (criteria: QueryParams) =>
       couponService.paging({
         ...criteria,
         customerId: Number(route.params.customerId)
       }),
+    (routerCriteria) => plainToClass(QueryParams, routerCriteria),
     (criteria) =>
       router.replace({
         path: `/biz/coupon/${route.params.customerId}`,
@@ -203,7 +203,7 @@ const del = async (id: number) => {
     content: `删除成功`,
     duration: 5000
   })
-  changePage(pagination.page)
+  changePage(paginationProps.page)
 }
 </script>
 <style lang="scss" scoped></style>

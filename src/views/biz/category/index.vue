@@ -6,21 +6,21 @@
     @reset-sort="handleResetSorter"
   ></QueryParamsInput>
   <NForm class="mb-4">
-    <NButton type="success" @click="$edit?.show()">新增</NButton>
+    <NButton type="success" @click="test">新增</NButton>
   </NForm>
   <NDataTable
     remote
     :loading="loading"
     :bordered="false"
     :columns="columns"
-    :data="currentPage?.items"
+    :data="pagination?.items"
     :row-key="(row) => row.id"
-    :pagination="pagination"
+    :pagination="paginationProps"
     @update:sorter="handleSorter"
   />
   <Edit
     ref="$edit"
-    @confirm="(goTop) => changePage(goTop ? 1 : pagination.page)"
+    @confirm="(goTop) => changePage(goTop ? 1 : paginationProps.page)"
   ></Edit>
 </template>
 <script lang="tsx" setup>
@@ -32,7 +32,7 @@ import {
 import { QueryParams } from "@/assets/modules/biz/dtos/category.dto"
 import { categoryService } from "@/assets/modules/biz/services/category.service"
 import { Category } from "@/assets/modules/biz/vos/category.vo"
-import { usePaging } from "@/assets/page/paging.hook"
+import { usePaging } from "@/assets/modules/base/hooks/paging.hook"
 import { format } from "@/assets/share/utils/date.util"
 import { QueryParamsType } from "@/components/pages/query-params-input/constants"
 import QueryParamsInput from "@/components/pages/query-params-input/index.vue"
@@ -65,7 +65,7 @@ const queryParamsModel = {
 }
 
 let {
-  currentPage,
+  paginationProps,
   loading,
   pagination,
   query,
@@ -75,18 +75,20 @@ let {
   resetSort
 } = $(
   usePaging(
+    (criteria: QueryParams) => categoryService.paging(criteria),
     (routerCriteria) => plainToClass(QueryParams, routerCriteria),
-    (criteria) => categoryService.paging(criteria),
     (criteria) =>
       router.replace({
-        path: "/biz/category",
+        path: `/biz/category`,
         query: instanceToPlain(criteria)
       })
   )
 )
 
 let $edit = $ref<any | undefined>()
-
+const test = () => {
+  console.log($edit)
+}
 const columns: TableColumns<Category> = [
   // {
   //   type: "selection",

@@ -22,6 +22,6 @@ export class Pageable {
   constructor(query?: Partial<Pageable>) {
     this.page = query?.page ?? 1
     this.limit = query?.limit ?? 5
-    this.sort = query?.sort ?? []
+    this.sort = query?.sort ?? ["createDate,desc"]
   }
 }

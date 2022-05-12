@@ -11,9 +11,9 @@
     :loading="loading"
     :bordered="false"
     :columns="columns"
-    :data="currentPage?.items"
+    :data="pagination?.items"
     :row-key="(row) => row.id"
-    :pagination="pagination"
+    :pagination="paginationProps"
     @update:sorter="handleSorter"
   />
   <GiveCoupon ref="$giveCoupon"></GiveCoupon>
@@ -30,7 +30,7 @@ import {
 import { QueryParams } from "@/assets/modules/biz/dtos/customer.dto"
 import { customerService } from "@/assets/modules/biz/services/customer.service"
 import { Customer } from "@/assets/modules/biz/vos/customer.vo"
-import { usePaging } from "@/assets/page/paging.hook"
+import { usePaging } from "@/assets/modules/base/hooks/paging.hook"
 import { format } from "@/assets/share/utils/date.util"
 import { QueryParamsType } from "@/components/pages/query-params-input/constants"
 import QueryParamsInput from "@/components/pages/query-params-input/index.vue"
@@ -80,7 +80,7 @@ const queryParamsModel = {
 }
 
 let {
-  currentPage,
+  paginationProps,
   loading,
   pagination,
   query,
@@ -90,8 +90,8 @@ let {
   resetSort
 } = $(
   usePaging(
+    (criteria: QueryParams) => customerService.paging(criteria),
     (routerCriteria) => plainToClass(QueryParams, routerCriteria),
-    (criteria) => customerService.paging(criteria),
     (criteria) =>
       router.replace({
         path: "/biz/customer",
@@ -99,6 +99,7 @@ let {
       })
   )
 )
+
 let $giveCoupon = $ref<any | undefined>()
 
 const columns: TableColumns<Customer> = [
@@ -188,7 +189,7 @@ const handleFrozen = async ({ id, frozenState }: Customer) => {
     content: `${HandleFrozenStateDictionary[frozenState]}成功`,
     duration: 5000
   })
-  changePage(pagination.page)
+  changePage(paginationProps.page)
 }
 </script>
 <style lang="scss" scoped></style>
