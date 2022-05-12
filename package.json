@@ -11,6 +11,8 @@
     "@headlessui/vue": "^1.4.1",
     "@popperjs/core": "^2.10.1",
     "@tailwindcss/line-clamp": "^0.2.1",
+    "@zeongit/share-ts": "git@github.com:fuzeongit/share-ts.git#releases",
+    "@zeongit/share-nest-vue": "git@github.com:fuzeongit/share-nest-vue.git#releases",    
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "dayjs": "^1.10.7",
@@ -22,8 +24,7 @@
     "rxjs": "^7.4.0",
     "vue": "^3.2.19",
     "vue-router": "^4.0.0-0",
-    "vue3-i18n": "^1.1.4",
-    "@zeongit/share-nest-vue": "git@github.com:fuzeongit/share-nest-vue.git"
+    "vue3-i18n": "^1.1.4"
   },
   "devDependencies": {
     "@faker-js/faker": "^6.0.0-alpha.6",
