@@ -1,7 +1,9 @@
 import { Result } from "@/assets/http/models"
-import { Pageable } from "@/assets/page/models"
-import { usePaging as useBasePaging } from "@/assets/page/paging.hook"
-import { Pagination } from "@/assets/page/vos"
+import {
+  Pageable,
+  Pagination,
+  usePaging as useBasePaging
+} from "@zeongit/share-nest-vue/page"
 import { SortOrder, SortState } from "naive-ui/lib/data-table/src/interface"
 import { ref, watchEffect } from "vue"
 import { LocationQuery } from "vue-router"

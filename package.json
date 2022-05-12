@@ -22,7 +22,8 @@
     "rxjs": "^7.4.0",
     "vue": "^3.2.19",
     "vue-router": "^4.0.0-0",
-    "vue3-i18n": "^1.1.4"
+    "vue3-i18n": "^1.1.4",
+    "@zeongit/share-nest-vue": "git@github.com:fuzeongit/share-nest-vue.git"
   },
   "devDependencies": {
     "@faker-js/faker": "^6.0.0-alpha.6",
