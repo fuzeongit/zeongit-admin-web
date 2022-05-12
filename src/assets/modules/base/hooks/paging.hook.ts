@@ -1,4 +1,4 @@
-import { Result } from "@/assets/http/models"
+import { Result } from "@zeongit/share-nest-vue/http"
 import {
   Pageable,
   Pagination,
@@ -34,7 +34,6 @@ export const usePaging = <T, S extends Pageable>(
     resetSort,
     paging
   } = useBasePaging(buildService, buildParams, handle, checkResult)
-
   /**
    * 改变排序
    * @param sortState

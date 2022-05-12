@@ -11,7 +11,7 @@
     :loading="loading"
     :bordered="false"
     :columns="columns"
-    :data="pagination?.items ?? []"
+    :data="pagination?.items"
     :row-key="(row) => row.id"
     :pagination="paginationProps"
     @update:sorter="handleSorter"

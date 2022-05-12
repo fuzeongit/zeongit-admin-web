@@ -1,5 +1,4 @@
-import { HttpStatus } from "@/assets/http/constants"
-import { Result } from "@/assets/http/models"
+import { HttpStatus, Result } from "@zeongit/share-nest-vue/http"
 import { useNotification } from "naive-ui"
 
 export const useFunction = () => {
