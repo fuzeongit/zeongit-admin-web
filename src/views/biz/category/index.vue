@@ -6,7 +6,7 @@
     @reset-sort="handleResetSorter"
   ></QueryParamsInput>
   <NForm class="mb-4">
-    <NButton type="success" @click="$edit?.show()">新增</NButton>
+    <NButton @click="$edit?.show()">新增</NButton>
   </NForm>
   <NDataTable
     remote
@@ -139,7 +139,6 @@ const columns: TableColumns<Category> = [
         <NButton
           quaternary
           size="small"
-          type="success"
           onClick={() => $edit?.show(row.id)}
           disabled={row.useState === UseState.Used}
         >

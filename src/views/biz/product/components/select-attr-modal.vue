@@ -22,7 +22,7 @@
       <NFormItem label="价格" path="price">
         <NInput v-model:value="price" placeholder="请输入价格" clearable />
       </NFormItem>
-      <NButton type="success" class="justify-end" @click="save">保存</NButton>
+      <NButton class="justify-end" @click="save">保存</NButton>
     </NForm>
   </NModal>
 </template>

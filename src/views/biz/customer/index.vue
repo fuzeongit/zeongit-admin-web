@@ -20,6 +20,7 @@
 </template>
 <script lang="tsx" setup>
 import { useFunction } from "@/assets/modules/base/hooks/fun.hook"
+import { usePaging } from "@/assets/modules/base/hooks/paging.hook"
 import { useSort } from "@/assets/modules/base/hooks/sort.hook"
 import {
   FrozenState,
@@ -30,11 +31,10 @@ import {
 import { QueryParams } from "@/assets/modules/biz/dtos/customer.dto"
 import { customerService } from "@/assets/modules/biz/services/customer.service"
 import { Customer } from "@/assets/modules/biz/vos/customer.vo"
-import { usePaging } from "@/assets/modules/base/hooks/paging.hook"
-import { format } from "@zeongit/share-ts"
 import { QueryParamsType } from "@/components/pages/query-params-input/constants"
 import QueryParamsInput from "@/components/pages/query-params-input/index.vue"
 import { QueryParamsModel } from "@/components/pages/query-params-input/models"
+import { format } from "@zeongit/share-ts"
 import { instanceToPlain, plainToClass } from "class-transformer"
 import {
   NButton,
@@ -141,7 +141,6 @@ const columns: TableColumns<Customer> = [
           <NButton
             quaternary
             size="small"
-            type="success"
             onClick={() => $giveCoupon.show(row.id)}
           >
             赠券
@@ -149,7 +148,6 @@ const columns: TableColumns<Customer> = [
           <NButton
             quaternary
             size="small"
-            type="success"
             onClick={() => router.push({ path: `/biz/coupon/${row.id}` })}
           >
             查券

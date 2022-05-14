@@ -17,7 +17,7 @@
     </NForm>
     <div class="mb-4">
       <div class="mb-2">
-        <NButton type="success" @click="uploadMainImage">上传主图</NButton>
+        <NButton @click="uploadMainImage">上传主图</NButton>
       </div>
       <NEmpty description="暂无主图" v-if="!dto.mainImage"> </NEmpty>
       <NImageGroup show-toolbar-tooltip v-else>
@@ -29,7 +29,7 @@
 
     <div class="mb-4">
       <div class="mb-2">
-        <NButton type="success" @click="uploadImages">上传子图片</NButton>
+        <NButton @click="uploadImages">上传子图片</NButton>
       </div>
       <NEmpty description="暂无子图片" v-if="!dto.images.length"> </NEmpty>
       <NImageGroup show-toolbar-tooltip v-else>
@@ -45,7 +45,7 @@
     </div>
     <div class="mb-4">
       <div class="mb-2">
-        <NButton type="success" @click="uploadDetail">上传详细信息</NButton>
+        <NButton @click="uploadDetail">上传详细信息</NButton>
       </div>
       <NEmpty description="暂无详细信息" v-if="!dto.detail.length"> </NEmpty>
       <NImageGroup show-toolbar-tooltip v-else>
@@ -60,18 +60,11 @@
       </NImageGroup>
     </div>
     <NSpace class="!mb-1">
-      <NButton type="success" @click="addAttr" :disabled="!create"
-        >新增</NButton
-      >
-      <NButton
-        type="success"
-        @click="generateSku"
-        :disabled="!dto.attrList.length || !create"
+      <NButton @click="addAttr" :disabled="!create">新增</NButton>
+      <NButton @click="generateSku" :disabled="!dto.attrList.length || !create"
         >生成SKU</NButton
       >
-      <NButton @click="selectAttrVisible = true" type="success"
-        >添加SKU</NButton
-      >
+      <NButton @click="selectAttrVisible = true">添加SKU</NButton>
     </NSpace>
 
     <NDataTable
@@ -88,7 +81,7 @@
       :row-key="(row) => row.id"
     />
     <div class="my-4">
-      <NButton type="success" @click="save">保存</NButton>
+      <NButton @click="save">保存</NButton>
     </div>
   </NCard>
   <SelectAttrModal

@@ -7,9 +7,7 @@
     ref="$queryParamsInput"
   ></QueryParamsInput>
   <NForm class="mb-4">
-    <NButton type="success" @click="router.push('/biz/product/edit')"
-      >新增</NButton
-    >
+    <NButton @click="router.push('/biz/product/edit')">新增</NButton>
   </NForm>
   <NDataTable
     remote
@@ -181,7 +179,6 @@ const columns: TableColumns<Product> = [
           <NButton
             quaternary
             size="small"
-            type="success"
             onClick={() =>
               router.push({
                 path: `/biz/product/edit/${row.id}`
@@ -196,7 +193,6 @@ const columns: TableColumns<Product> = [
           <NButton
             quaternary
             size="small"
-            type="success"
             onClick={() =>
               router.push({
                 path: `/biz/product/detail/${row.id}`

@@ -179,7 +179,7 @@ const columns: TableColumns<Coupon> = [
 
       return (
         <NSpace>
-          <NButton quaternary size="small" type="success">
+          <NButton quaternary size="small">
             跟踪订单
           </NButton>
           {row.useState === UseState.Unused ? deleteButton : null}

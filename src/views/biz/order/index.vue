@@ -60,7 +60,6 @@ const queryParamsModel = {
   )
 }
 
-
 let {
   paginationProps,
   loading,
@@ -140,10 +139,10 @@ const columns: TableColumns<Order> = [
     render(row) {
       return (
         <NSpace>
-          <NButton quaternary size="small" type="success">
+          <NButton quaternary size="small">
             详情
           </NButton>
-          <NButton quaternary size="small" type="success">
+          <NButton quaternary size="small">
             发货
           </NButton>
         </NSpace>

@@ -10,11 +10,7 @@
       <NFormItem label="名称" path="name">
         <NInput v-model:value="dto.name" placeholder="请输入名称" clearable />
       </NFormItem>
-      <NButton
-        type="success"
-        class="justify-end"
-        @click="save"
-        :loading="loading"
+      <NButton class="justify-end" @click="save" :loading="loading"
         >保存</NButton
       >
     </NForm>

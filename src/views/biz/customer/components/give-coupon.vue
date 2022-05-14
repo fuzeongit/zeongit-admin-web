@@ -45,11 +45,7 @@
           />
         </NFormItem>
       </template>
-      <NButton
-        type="success"
-        class="justify-end"
-        @click="save"
-        :loading="loading"
+      <NButton class="justify-end" @click="save" :loading="loading"
         >保存
       </NButton>
     </NForm>

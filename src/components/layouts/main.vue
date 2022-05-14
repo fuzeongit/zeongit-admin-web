@@ -4,40 +4,42 @@
     :locale="zhCN"
     :date-locale="dateZhCN"
   >
-    <NNotificationProvider>
-      <NLoadingBarProvider>
-        <NLayout position="absolute">
-          <NLayoutHeader style="height: 64px" bordered>
-            颐和园路
-          </NLayoutHeader>
-          <NLayout has-sider position="absolute" style="top: 64px; bottom: 0">
-            <NLayoutSider
-              bordered
-              collapse-mode="width"
-              :collapsed-width="64"
-              :width="240"
-              :collapsed="collapsed"
-              show-trigger
-              @collapse="collapsed = true"
-              @expand="collapsed = false"
-            >
-              <NMenu
-                v-model:value="value"
-                :collapsed="collapsed"
+    <NThemeEditor>
+      <NNotificationProvider>
+        <NLoadingBarProvider>
+          <NLayout position="absolute">
+            <NLayoutHeader style="height: 64px" bordered>
+              颐和园路
+            </NLayoutHeader>
+            <NLayout has-sider position="absolute" style="top: 64px; bottom: 0">
+              <NLayoutSider
+                bordered
+                collapse-mode="width"
                 :collapsed-width="64"
-                :collapsed-icon-size="22"
-                :options="menuOptions"
-              />
-            </NLayoutSider>
-            <NLayout>
-              <NLayoutContent content-style="padding: 24px;">
-                <RouterView />
-              </NLayoutContent>
+                :width="240"
+                :collapsed="collapsed"
+                show-trigger
+                @collapse="collapsed = true"
+                @expand="collapsed = false"
+              >
+                <NMenu
+                  v-model:value="value"
+                  :collapsed="collapsed"
+                  :collapsed-width="64"
+                  :collapsed-icon-size="22"
+                  :options="menuOptions"
+                />
+              </NLayoutSider>
+              <NLayout>
+                <NLayoutContent content-style="padding: 24px;">
+                  <RouterView />
+                </NLayoutContent>
+              </NLayout>
             </NLayout>
           </NLayout>
-        </NLayout>
-      </NLoadingBarProvider>
-    </NNotificationProvider>
+        </NLoadingBarProvider>
+      </NNotificationProvider>
+    </NThemeEditor>
   </NConfigProvider>
 </template>
 
@@ -57,13 +59,12 @@ import {
   NLoadingBarProvider,
   NMenu,
   NNotificationProvider,
-  zhCN
+  zhCN,
+  NThemeEditor
 } from "naive-ui"
 import { watchEffect } from "vue"
 import { RouterLink, RouterView, useRoute } from "vue-router"
-
 const themeOverrides: GlobalThemeOverrides = {}
-
 const route = useRoute()
 
 let collapsed = $ref(false)
