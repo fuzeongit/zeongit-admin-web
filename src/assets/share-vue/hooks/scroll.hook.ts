@@ -1,4 +1,9 @@
-import { fromEvent, throttleTime } from "rxjs"
+import {
+  animationFrameScheduler,
+  fromEvent,
+  observeOn,
+  throttleTime
+} from "rxjs"
 import { readonly, ref, Ref, watchEffect } from "vue"
 
 /**
@@ -25,7 +30,7 @@ export const useScroll = <T extends HTMLElement>(
   watchEffect(() => {
     if (!element.value) return
     fromEvent(element.value, "scroll")
-      .pipe(throttleTime(16))
+      .pipe(observeOn(animationFrameScheduler))
       .subscribe(onScroll)
   })
   return { state: readonly(state), element }

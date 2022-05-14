@@ -1,4 +1,6 @@
-import { readonly, Ref, ref, watch } from "vue"
+import { computed, readonly, Ref, ref } from "@vue/reactivity"
+import { animationFrameScheduler, Observable, observeOn } from "rxjs"
+import { onMounted, watchEffect } from "vue"
 
 /**
  * 钩子
@@ -13,17 +15,37 @@ export const useIntersect = <T extends HTMLElement>(
   options?: IntersectionObserverInit
 ) => {
   const entries = ref<IntersectionObserverEntry[]>([])
-  const intersectionObserver = ref<IntersectionObserver>()
-  watch(element, (n) => {
-    intersectionObserver.value?.disconnect()
-    if (!n) return
-    intersectionObserver.value = new IntersectionObserver((_entries) => {
-      entries.value = _entries as []
-    }, options)
-    intersectionObserver.value!.observe(n as T)
+
+  const intersection$ = ref<Observable<IntersectionObserverEntry[]>>()
+
+  const isIntersecting = computed(() =>
+    entries.value.some((item) => item.isIntersecting)
+  )
+
+  onMounted
+  watchEffect(() => {
+    if (!element.value) return
+    intersection$.value = new Observable<IntersectionObserverEntry[]>(
+      (observer) => {
+        const intersectionObserver = new IntersectionObserver((entries) => {
+          observer.next(entries)
+        }, options)
+        intersectionObserver.observe(element.value as T)
+        observer.unsubscribe = () => {
+          intersectionObserver.disconnect()
+        }
+      }
+    ).pipe(observeOn(animationFrameScheduler))
   })
-  return {
-    entries: readonly(entries),
-    intersectionObserver: readonly(intersectionObserver)
-  }
+
+  watchEffect(() => {
+    const subscription = intersection$.value?.subscribe((value) => {
+      entries.value = value
+    })
+    return () => {
+      subscription?.unsubscribe()
+    }
+  })
+
+  return { entries, isIntersecting, intersection$ }
 }

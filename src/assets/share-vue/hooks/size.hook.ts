@@ -1,5 +1,10 @@
-import { readonly, Ref, ref, watchEffect } from "vue"
+import { animationFrameScheduler, Observable, observeOn } from "rxjs"
+import { Ref, ref, watchEffect } from "vue"
 
+interface State {
+  width: number
+  height: number
+}
 /**
  * 钩子
  * 获取目标元素的宽高
@@ -7,26 +12,40 @@ import { readonly, Ref, ref, watchEffect } from "vue"
  * @param element 目标元素
  * @returns
  */
-export const useSize = <T extends HTMLElement>(
-  element: Ref<T | undefined>
-) => {
+export const useSize = <T extends HTMLElement>(element: Ref<T | undefined>) => {
   const state = ref({
     width: element.value?.clientWidth ?? 0,
     height: element.value?.clientHeight ?? 0
   })
-  const resizeObserver = ref<ResizeObserver | undefined>()
+  const resize$ = ref<Observable<State>>()
+
   watchEffect(() => {
-    resizeObserver.value?.disconnect()
     if (!element.value) return
-    resizeObserver.value = new ResizeObserver((entries) => {
-      entries.forEach((entry) => {
-        state.value = {
-          width: entry.target.clientWidth,
-          height: entry.target.clientHeight
-        }
+
+    resize$.value = new Observable<State>((observer) => {
+      const resizeObserver = new ResizeObserver((entries) => {
+        entries.forEach((entry) => {
+          observer.next({
+            width: entry.target.clientWidth,
+            height: entry.target.clientHeight
+          })
+        })
       })
-    })
-    resizeObserver.value!.observe(element.value as unknown as T)
+      resizeObserver.observe(element.value as T)
+      observer.unsubscribe = () => {
+        resizeObserver.disconnect()
+      }
+    }).pipe(observeOn(animationFrameScheduler))
   })
-  return { state: readonly(state), resizeObserver: readonly(resizeObserver) }
+
+  watchEffect(() => {
+    const subscription = resize$.value?.subscribe((value) => {
+      state.value = value
+    })
+    return () => {
+      subscription?.unsubscribe()
+    }
+  })
+
+  return { state, resize$ }
 }
