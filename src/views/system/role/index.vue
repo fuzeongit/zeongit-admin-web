@@ -12,7 +12,6 @@
 import { QueryParamsType } from "@/components/pages/query-params-input/constants"
 import QueryParamsInput from "@/components/pages/query-params-input/index.vue"
 import { QueryParamsModel } from "@/components/pages/query-params-input/models"
-import { faker } from "@faker-js/faker"
 import { NButton, NDataTable } from "naive-ui"
 import type { TableColumns } from "naive-ui/lib/data-table/src/interface"
 const queryParamsModel = {
@@ -54,12 +53,7 @@ const columns: TableColumns = [
   }
 ]
 
-let data = $ref(
-  Array.from({ length: 20 }).map((it) => ({
-    name: faker.name.findName(),
-    createDate: faker.date.recent().toDateString()
-  }))
-)
+let data = $ref(Array.from({ length: 20 }).map((it) => ({})))
 
 let a = $ref([])
 </script>

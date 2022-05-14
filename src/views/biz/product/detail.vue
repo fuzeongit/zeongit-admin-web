@@ -103,7 +103,6 @@ import { useFunction } from "@/assets/modules/base/hooks/fun.hook"
 import { Attr, SaveDto, Sku } from "@/assets/modules/biz/dtos/product.dto"
 import { categoryService } from "@/assets/modules/biz/services/category.service"
 import { productService } from "@/assets/modules/biz/services/product.service"
-import faker from "@faker-js/faker"
 import { plainToClass } from "class-transformer"
 import {
   NButton,
@@ -299,15 +298,9 @@ const addSku = (sku: Sku) => {
   dto.skuList.push(sku)
 }
 
-const uploadMainImage = async () => {
-  dto.mainImage = faker.image.city()
-}
-const uploadImages = async () => {
-  dto.images.push(faker.image.city())
-}
-const uploadDetail = async () => {
-  dto.detail.push(faker.image.city())
-}
+const uploadMainImage = async () => {}
+const uploadImages = async () => {}
+const uploadDetail = async () => {}
 const save = async () => {
   const result = await (create
     ? productService.create(dto)

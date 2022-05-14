@@ -6,7 +6,7 @@
     @reset-sort="handleResetSorter"
   ></QueryParamsInput>
   <NForm class="mb-4">
-    <NButton type="success" @click="test">新增</NButton>
+    <NButton type="success" @click="$edit?.show()">新增</NButton>
   </NForm>
   <NDataTable
     remote

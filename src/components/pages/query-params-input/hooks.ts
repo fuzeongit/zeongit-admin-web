@@ -1,4 +1,4 @@
-import { Result } from "@/assets/http/models"
+import { Result } from "@zeongit/share-nest-vue/http"
 import { SelectOption } from "naive-ui"
 import { QueryParamsModel } from "./models"
 

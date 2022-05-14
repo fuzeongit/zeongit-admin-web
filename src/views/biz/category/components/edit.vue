@@ -25,7 +25,6 @@
 import { useFunction } from "@/assets/modules/base/hooks/fun.hook"
 import { SaveDto } from "@/assets/modules/biz/dtos/category.dto"
 import { categoryService } from "@/assets/modules/biz/services/category.service"
-import faker from "@faker-js/faker"
 import {
   NButton,
   NForm,
@@ -46,8 +45,6 @@ const emits = defineEmits({
 let visible = $ref(false)
 let dto = $ref(new SaveDto())
 let loading = $ref(false)
-
-faker.setLocale("zh_CN")
 
 const save = async () => {
   if (loading) return
